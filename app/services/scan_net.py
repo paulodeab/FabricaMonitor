@@ -2,6 +2,8 @@ import socket
 import nmap
 import json
 
+#API da NSE - https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=?
+
 class ScanNetwork:
 
     def __init__(self):
@@ -62,16 +64,6 @@ class ScanNetwork:
                     "os": os,
                     "open_ports": open_ports
                 })
-
-                # Exibe as informações do dispositivo encontrado
-                print(f"\nDispositivo Ativo: IP={ip}, Hostname={hostname}, MAC={mac}")
-                print(f"Sistema Operacional: {os}")
-                if open_ports:
-                    print("Portas Abertas:")
-                    for port, service, version in open_ports:
-                        print(f"  - Porta: {port}, Serviço: {service}, Versão: {version}")
-                else:
-                    print("Nenhuma porta aberta encontrada.")
         except Exception as e:
             pass
 
@@ -81,32 +73,15 @@ class ScanNetwork:
             raise ValueError("Prefixo da rede não definido. Use set_ip para definir o IP.")
 
         # Escaneia IPs de 1 a 254 de forma sequencial
-        for i in range(1, 255):
+        for i in range(1, 3):
             ip = f"{self.network_prefix}.{i}"
             self.scan_ip(ip)
 
-        print("\nEscaneamento Concluído.")
-        print("Dispositivos Encontrados:")
-        for device in self.devices:
-            ip = device["ip"]
-            hostname = device["hostname"]
-            mac = device["mac"]
-            os = device["os"]
-            open_ports = device["open_ports"]
 
-            print(f"\nIP: {ip}, Hostname: {hostname}, MAC: {mac}")
-            print(f"Sistema Operacional: {os}")
-            if open_ports:
-                print("Portas Abertas:")
-                for port, service, version in open_ports:
-                    print(f"  - Porta: {port}, Serviço: {service}, Versão: {version}")
-            else:
-                print("Nenhuma porta aberta encontrada.")
 
     def generate_json(self) -> str:
         """Gera um JSON com os resultados do escaneamento."""
         return self.devices
-
 
 
 
