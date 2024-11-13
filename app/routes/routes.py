@@ -24,11 +24,16 @@ def get_data():
         return scan.generate_json()
     except Exception as e:
         return {"Error": str(e)}
+    
 
 @router.post("/save_hosts")
-def create_host(host: host.HostCreate, db: Session = Depends(get_db)):
+def create_host(host: host.HostCreate,  db: Session = Depends(get_db)):
     try:
         # Use a sessão 'db' injetada corretamente
-        return host_crud.create_host(db, host)
+        result_host = host_crud.create_host(db, host)
+        print(result_host)
+        # return host_crud.create_host(db, host)
     except Exception as e:
         raise HTTPException(status_code=501, detail=f"Erro ao salvar: {e}")
+    
+
