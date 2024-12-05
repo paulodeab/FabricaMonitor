@@ -31,7 +31,7 @@ class ScanNetwork:
 
         ip_parts = self._ip.split('.')
         network_prefix = f"{ip_parts[0]}.{ip_parts[1]}.{ip_parts[2]}"
-        print(f"Prefixo da Rede: {network_prefix}.0/30")
+        print(f"Prefixo da Rede: {network_prefix}.0/24")
         return network_prefix
 
     def scan_ip(self, ip: str):
@@ -64,8 +64,10 @@ class ScanNetwork:
                     "os": os,
                     "open_ports": open_ports
                 })
+
+                print(self.devices)
         except Exception as e:
-            pass
+            print("SCAN ERROR " + e)
 
     def scan_network(self):
         """Escaneia a rede de forma sequencial, sem usar threads."""
@@ -73,7 +75,7 @@ class ScanNetwork:
             raise ValueError("Prefixo da rede não definido. Use set_ip para definir o IP.")
 
         # Escaneia IPs de 1 a 254 de forma sequencial
-        for i in range(1, 3):
+        for i in range(1, 254):
             ip = f"{self.network_prefix}.{i}"
             self.scan_ip(ip)
 
